@@ -2,20 +2,12 @@ import React, { useState } from "react";
 import Board from "../Board";
 import GameStatus from "../GameStatus";
 import { getNextMove } from "../ComputerAI";
-import './Game.css'
+import { initialBoardState } from "../Utility"
+import "./Game.css";
 
 const Game = () => {
   const [gameState, setGameState] = useState({
-    board: [
-      ["human", null, "human", null, "human", null, "human", null],
-      [null, "human", null, "human", null, "human", null, "human"],
-      ["human", null, "human", null, "human", null, "human", null],
-      [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null],
-      [null, "computer", null, "computer", null, "computer", null, "computer"],
-      ["computer", null, "computer", null, "computer", null, "computer", null],
-      [null, "computer", null, "computer", null, "computer", null, "computer"],
-    ], // 2D array representing the game board
+    board: initialBoardState, // 2D array representing the game board
     turn: "human", // 'human' or 'computer'
     outcome: null, // 'human', 'computer', or null if the game is still ongoing
   });
@@ -175,7 +167,10 @@ const Game = () => {
       for (let col = 0; col < board[0].length; col++) {
         if (board[row][col] === "human" || board[row][col] === "humanKing") {
           humanCheckers++;
-        } else if (board[row][col] === "computer" || board[row][col] === "computerKing") {
+        } else if (
+          board[row][col] === "computer" ||
+          board[row][col] === "computerKing"
+        ) {
           computerCheckers++;
         }
       }
