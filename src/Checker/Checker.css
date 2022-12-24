@@ -1,0 +1,21 @@
+.checker {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  
+  .red {
+    background-color: red;
+  }
+
+  .red-king {
+    background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(255,0,0,1) 0%, rgba(121,9,9,1) 27%, rgba(82,0,0,1) 100%);
+  }
+  
+  .black {
+    background-color: black;
+  }
+
+  .black-king {
+    background: radial-gradient(circle, rgba(127,127,140,1) 18%, rgba(72,71,89,1) 43%, rgba(0,0,0,1) 100%);;
+  }
