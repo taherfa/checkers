@@ -1,10 +1,10 @@
-function getPossibleMoves(board, color) {
+function getPossibleMoves(board) {
   const possibleMoves = [];
 
   // Iterate through the board and find all checkers of the given color
   for (let row = 0; row < 8; row++) {
     for (let col = 0; col < 8; col++) {
-      if (board[row][col] === color) {
+      if (board[row][col] === "computer" || board[row][col] === "computerKing") {
         // Check if the checker can make any non-capturing moves
         if (canMove(board, row, col, row - 1, col + 1)) {
           possibleMoves.push({
@@ -22,9 +22,27 @@ function getPossibleMoves(board, color) {
             col: col - 1,
           });
         }
+        if (board[row][col] === "computerKing") {
+          if (canMove(board, row, col, row + 1, col + 1)) {
+            possibleMoves.push({
+              startRow: row,
+              startCol: col,
+              row: row + 1,
+              col: col + 1,
+            });
+          }
+          if (canMove(board, row, col, row + 1, col - 1)) {
+            possibleMoves.push({
+              startRow: row,
+              startCol: col,
+              row: row + 1,
+              col: col - 1,
+            });
+          }
+        }
+
         // Check if the checker can make any capturing moves
         if (canCapture(board, row, col, row - 2, col + 2)) {
-          console.log("yessir");
           possibleMoves.push({
             startRow: row,
             startCol: col,
@@ -33,13 +51,30 @@ function getPossibleMoves(board, color) {
           });
         }
         if (canCapture(board, row, col, row - 2, col - 2)) {
-          console.log("yessir");
           possibleMoves.push({
             startRow: row,
             startCol: col,
             row: row - 2,
             col: col - 2,
           });
+        }
+        if (board[row][col] === "computerKing") {
+          if (canCapture(board, row, col, row + 2, col + 2)) {
+            possibleMoves.push({
+              startRow: row,
+              startCol: col,
+              row: row + 2,
+              col: col + 2,
+            });
+          }
+          if (canCapture(board, row, col, row + 2, col - 2)) {
+            possibleMoves.push({
+              startRow: row,
+              startCol: col,
+              row: row +2,
+              col: col - 2,
+            });
+          }
         }
       }
     }
@@ -78,10 +113,9 @@ const canCapture = (board, row, col, newRow, newCol) => {
     return false;
   }
   // Check if there is an enemy checker in the square between the current position and the destination
-  const enemyColor = "human";
   const enemyRow = row + (newRow - row) / 2;
   const enemyCol = col + (newCol - col) / 2;
-  if (board[enemyRow][enemyCol] !== enemyColor) {
+  if (board[enemyRow][enemyCol] !== "human" && board[enemyRow][enemyCol] !== "humanKing") {
     return false;
   }
   return true;
@@ -95,33 +129,35 @@ function selectBestMove(moves) {
     }
   }
 
-  
-
   return moves[moves.length - 1];
 }
 
-export function getNextMove(board, color) {
-  const moves = getPossibleMoves(board, color);
+export function getNextMove(board) {
+  const moves = getPossibleMoves(board);
+  console.log(moves)
   const bestMove = selectBestMove(moves);
+  console.log("bestMove", bestMove)
 
   if (!bestMove) {
-    return null
+    return null;
   }
 
   if (Math.abs(bestMove.startRow - bestMove.row) === 2) {
     const enemyRow = bestMove.startRow + (bestMove.row - bestMove.startRow) / 2;
     const enemyCol = bestMove.startCol + (bestMove.col - bestMove.startCol) / 2;
-    console.log(enemyRow, enemyCol)
-    board[enemyRow][enemyCol] = null
-    
+    console.log("enemyRow, enemyCol", enemyRow, enemyCol);
+    board[enemyRow][enemyCol] = null;
+
     return {
       start: { row: bestMove.startRow, col: bestMove.startCol },
       end: { row: bestMove.row, col: bestMove.col },
+      color: board[bestMove.startRow][bestMove.startCol]
     };
   } else {
     return {
       start: { row: bestMove.startRow, col: bestMove.startCol },
       end: { row: bestMove.row, col: bestMove.col },
+      color: board[bestMove.startRow][bestMove.startCol]
     };
   }
 }

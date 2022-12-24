@@ -11,23 +11,19 @@ const Board = ({ board, handleSquareClick }) => {
     // if you clicked on a checkers piece
     if (color) {
       if (piece) {
-        // console.log("piece and then piece")
         // if you have already clicked on a checkers piece then reset
         setPiece(null)
         setNonPieceSquare(null)
       } else {
-        // console.log("piece only")
         setPiece({color: color, row: row, col: col})
       }
     } else {
       // if you clicked an empty square
       if (!piece) {
-        // console.log("square only")
         // but you haven't selected a checkers piece yet; therefore reset
         setPiece(null)
         setNonPieceSquare(null)
       } else {
-        // console.log("piece and then square")
         handleSquareClick(piece, {color: color, row: row, col: col})
 
         setPiece(null)

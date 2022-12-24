@@ -3,7 +3,7 @@ import React from 'react';
 const GameStatus = ({ outcome, turn }) => {
   return (
     <div>
-      {turn ? `${turn}'s turn` : outcome}
+      <h1>{!outcome ? `${turn}'s turn` : `${outcome} wins!`}</h1>
     </div>
   );
 };

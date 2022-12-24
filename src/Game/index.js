@@ -2,22 +2,25 @@ import React, { useState } from "react";
 import Board from "../Board";
 import GameStatus from "../GameStatus";
 import { getNextMove } from "../ComputerAI";
+import './Game.css'
 
 const Game = () => {
   const [gameState, setGameState] = useState({
     board: [
-      [null, "human", null, "human", null, "human", null, "human"],
       ["human", null, "human", null, "human", null, "human", null],
       [null, "human", null, "human", null, "human", null, "human"],
+      ["human", null, "human", null, "human", null, "human", null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
-      ["computer", null, "computer", null, "computer", null, "computer", null],
       [null, "computer", null, "computer", null, "computer", null, "computer"],
       ["computer", null, "computer", null, "computer", null, "computer", null],
+      [null, "computer", null, "computer", null, "computer", null, "computer"],
     ], // 2D array representing the game board
     turn: "human", // 'human' or 'computer'
     outcome: null, // 'human', 'computer', or null if the game is still ongoing
   });
+
+  console.log(gameState)
 
   const handleMove = (start, end) => {
     // Make a copy of the current game state
@@ -25,7 +28,7 @@ const Game = () => {
 
     // Validate the move
     // Check if it's the correct player's turn
-    if (newGameState.turn !== start.color) {
+    if (newGameState.turn !== "human" && newGameState.turn !== "humanKing") {
       // Display an error message or do something else to indicate that it's not the correct player's turn
       return;
     }
@@ -39,30 +42,43 @@ const Game = () => {
 
       // Update the board with the new positions of the checkers
       newGameState.board[start.row][start.col] = null;
-      newGameState.board[end.row][end.col] = start.color;
+
+      if (end.row === 7) {
+        newGameState.board[end.row][end.col] = "humanKing";
+      } else {
+        newGameState.board[end.row][end.col] = start.color;
+      }
 
       // Check if the game is over
       if (isGameOver(newGameState.board)) {
         newGameState.outcome = newGameState.turn;
       } else {
         // Use the ComputerAI component to generate the computer's move
-        const computerMove = getNextMove(newGameState.board, "computer");
+        const computerMove = getNextMove(newGameState.board);
+        console.log("COMPMOVE", computerMove);
 
         if (!computerMove) {
-          newGameState.outcome = 'human';
+          newGameState.outcome = "human";
           setGameState(newGameState);
+          console.log("so did outcome output?");
+          return;
         }
 
-        console.log(computerMove);
         // Update the board with the new positions of the checkers
         newGameState.board[computerMove.start.row][computerMove.start.col] =
           null;
-        newGameState.board[computerMove.end.row][computerMove.end.col] =
-          "computer";
+
+        if (computerMove.end.row === 0) {
+          newGameState.board[computerMove.end.row][computerMove.end.col] =
+            "computerKing";
+        } else {
+          newGameState.board[computerMove.end.row][computerMove.end.col] =
+            computerMove.color;
+        }
 
         // Check if the game is over
         if (isGameOver(newGameState.board)) {
-          newGameState.outcome = 'computer';
+          newGameState.outcome = "computer";
         } else {
           // Switch turns back to the human player
           newGameState.turn = "human";
@@ -99,31 +115,56 @@ const Game = () => {
       return false;
     }
 
-    // Check if the move is a single space diagonal move forward (for regular checkers moves)
-    if (
-      (end.row - start.row) === 1 &&
-      Math.abs(start.col - end.col) === 1
-    ) {
-      return true;
+    // Check if the move is a single space diagonal move (for king checkers moves)
+    if (board[start.row][start.col] === "humanKing") {
+      if (
+        Math.abs(end.row - start.row) === 1 &&
+        Math.abs(start.col - end.col) === 1
+      ) {
+        return true;
+      }
+    } else {
+      // Check if the move is a single space diagonal move forward (for regular checkers moves)
+      if (end.row - start.row === 1 && Math.abs(start.col - end.col) === 1) {
+        return true;
+      }
     }
 
-    // Check if the move is a jump over an opponent's checker (for captures)
-    if (
-      (end.row - start.row) === 2 &&
-      Math.abs(start.col - end.col) === 2
-    ) {
-      // Check if there is an opponent's checker in the middle position
-      const middleRow = (start.row + end.row) / 2;
-      const middleCol = (start.col + end.col) / 2;
+    // Check if the move is a jump over an opponent's checker (for king checker captures)
+    if (board[start.row][start.col] === "humanKing") {
       if (
-        board[middleRow][middleCol] === null ||
-        board[middleRow][middleCol] === start.color
+        Math.abs(end.row - start.row) === 2 &&
+        Math.abs(start.col - end.col) === 2
       ) {
-        return false;
+        // Check if there is an opponent's checker in the middle position
+        const middleRow = (start.row + end.row) / 2;
+        const middleCol = (start.col + end.col) / 2;
+        if (
+          board[middleRow][middleCol] === null ||
+          board[middleRow][middleCol] === start.color
+        ) {
+          return false;
+        }
+        // eliminate the piece you jumped over
+        board[middleRow][middleCol] = null;
+        return true;
       }
-      // eliminate the piece you jumped over
-      board[middleRow][middleCol] = null
-      return true;
+    } else {
+      // Check if the move is a jump over an opponent's checker forward (for regular checker captures)
+      if (end.row - start.row === 2 && Math.abs(start.col - end.col) === 2) {
+        // Check if there is an opponent's checker in the middle position
+        const middleRow = (start.row + end.row) / 2;
+        const middleCol = (start.col + end.col) / 2;
+        if (
+          board[middleRow][middleCol] === null ||
+          board[middleRow][middleCol] === start.color
+        ) {
+          return false;
+        }
+        // eliminate the piece you jumped over
+        board[middleRow][middleCol] = null;
+        return true;
+      }
     }
 
     // If the move is none of the above, it is not valid
@@ -136,15 +177,14 @@ const Game = () => {
     let computerCheckers = 0;
     for (let row = 0; row < board.length; row++) {
       for (let col = 0; col < board[0].length; col++) {
-        if (board[row][col] === "human") {
+        if (board[row][col] === "human" || board[row][col] === "humanKing") {
           humanCheckers++;
-        } else if (board[row][col] === "computer") {
+        } else if (board[row][col] === "computer" || board[row][col] === "computerKing") {
           computerCheckers++;
         }
       }
     }
-    console.log("humanCheckers", humanCheckers)
-    console.log("computerCheckers", computerCheckers)
+
     if (humanCheckers === 0 || computerCheckers === 0) {
       return true;
     }
@@ -245,7 +285,7 @@ const Game = () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <GameStatus outcome={gameState.outcome} turn={gameState.turn} />
       <Board board={gameState.board} handleSquareClick={handleMove} />
     </div>
