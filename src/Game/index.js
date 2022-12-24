@@ -20,8 +20,6 @@ const Game = () => {
     outcome: null, // 'human', 'computer', or null if the game is still ongoing
   });
 
-  console.log(gameState)
-
   const handleMove = (start, end) => {
     // Make a copy of the current game state
     const newGameState = { ...gameState };
@@ -55,12 +53,10 @@ const Game = () => {
       } else {
         // Use the ComputerAI component to generate the computer's move
         const computerMove = getNextMove(newGameState.board);
-        console.log("COMPMOVE", computerMove);
 
         if (!computerMove) {
           newGameState.outcome = "human";
           setGameState(newGameState);
-          console.log("so did outcome output?");
           return;
         }
 
