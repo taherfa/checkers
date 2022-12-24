@@ -1,5 +1,5 @@
-import { getNextMove } from "../../ComputerAI";
-import { isGameOver } from "../GameState";
+import { getNextMove } from "../../../ComputerAI";
+import { isGameOver } from "../GameState"
 
 export const handleMove = (start, end, gameState, setGameState) => {
   // Make a copy of the current game state

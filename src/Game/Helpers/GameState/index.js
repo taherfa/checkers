@@ -69,7 +69,6 @@ export const isGameOver = (board) => {
   
     // Check for captures
     if (color === "human" || board[row][col] === "humanKing") {
-      // Check for captures to the top-left and top-right
       if (
         row > 1 &&
         col > 1 &&
@@ -88,7 +87,6 @@ export const isGameOver = (board) => {
       }
     }
     if (color === "computer" || board[row][col] === "computerKing") {
-      // Check for captures to the bottom-left and bottom-right
       if (
         row < board.length - 2 &&
         col > 1 &&

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Board from "../Board";
 import GameStatus from "../GameStatus";
 import { initialBoardState } from "../Utility";
-import {handleMove} from "../Utility/Interactions"
+import {handleMove} from "./Helpers/Interactions"
 import "./Game.css";
 
 const Game = () => {

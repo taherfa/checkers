@@ -1,36 +1,15 @@
 import React, { useState } from "react";
 import Checker from "../Checker";
+import { callHandleMove, mapPieceToColor } from "./Helpers";
 
 import "./Board.css";
 
 const Board = ({ board, handleSquareClick }) => {
-  const [piece, setPiece] = useState(null)
-  const [nonPieceSquare, setNonPieceSquare] = useState(null)
+  const [piece, setPiece] = useState(null);
 
-  const callHandleMove = ({color, row, col}) => {
-    // if you clicked on a checkers piece
-    if (color) {
-      if (piece) {
-        // if you have already clicked on a checkers piece then reset
-        setPiece(null)
-        setNonPieceSquare(null)
-      } else {
-        setPiece({color: color, row: row, col: col})
-      }
-    } else {
-      // if you clicked an empty square
-      if (!piece) {
-        // but you haven't selected a checkers piece yet; therefore reset
-        setPiece(null)
-        setNonPieceSquare(null)
-      } else {
-        handleSquareClick(piece, {color: color, row: row, col: col})
-
-        setPiece(null)
-        setNonPieceSquare(null)
-      }
-    }
-  }
+  const handleClick = ({ color, row, col }) => {
+    callHandleMove({ color, row, col }, piece, setPiece, handleSquareClick);
+  };
 
   return (
     <div className="board">
@@ -41,7 +20,7 @@ const Board = ({ board, handleSquareClick }) => {
               color={square}
               row={rowIndex}
               col={colIndex}
-              handleClick={callHandleMove}
+              handleClick={handleClick}
               key={colIndex}
             />
           ))}
@@ -54,24 +33,13 @@ const Board = ({ board, handleSquareClick }) => {
 const Square = ({ color, row, col, handleClick }) => {
   const backgroundColor = (row + col) % 2 === 0 ? "white" : "tan";
 
-  let actuallyColor = null
-  if (color) {
-    if (color === 'human') {
-      actuallyColor = 'red'
-    } else if (color === 'computer') {
-      actuallyColor = 'black'
-    } else if (color === 'humanKing') {
-      actuallyColor = 'red-king'
-    } else {
-      actuallyColor = 'black-king'
-    }
-  }
-  
+  let actuallyColor = mapPieceToColor(color);
+
   return (
     <div
       className={`square`}
       style={{ backgroundColor }}
-      onClick={() => handleClick({color, row, col})}
+      onClick={() => handleClick({ color, row, col })}
     >
       {color ? <Checker color={actuallyColor} /> : null}
     </div>
