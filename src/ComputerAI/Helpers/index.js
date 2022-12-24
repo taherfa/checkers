@@ -140,7 +140,7 @@ export const selectBestMove = (moves, board, pieceType) => {
   // Filter out moves that result in the checker being captured
   const safeMoves = moves.filter((move) => {
     // Make a copy of the board and make the move
-    const testBoard = _.cloneDeep(board);
+    const testBoard = JSON.parse(JSON.stringify(board));
     testBoard[move.startRow][move.startCol] = null;
     testBoard[move.row][move.col] = pieceType;
 
