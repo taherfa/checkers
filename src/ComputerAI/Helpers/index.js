@@ -137,6 +137,12 @@ export const selectBestMove = (moves, board, pieceType) => {
     }
   }
 
+  for (const move of moves) {
+    if (move.row === 0) {
+      return move;
+    }
+  }
+
   // Filter out moves that result in the checker being captured
   const safeMoves = moves.filter((move) => {
     // Make a copy of the board and make the move

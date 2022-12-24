@@ -1,5 +1,5 @@
 import { getNextMove } from "../../../ComputerAI";
-import { isGameOver } from "../GameState"
+import { isGameOver } from "../GameState";
 
 export const handleMove = (start, end, gameState, setGameState) => {
   // Make a copy of the current game state
@@ -25,33 +25,36 @@ export const handleMove = (start, end, gameState, setGameState) => {
     setGameState(newGameState);
     return;
   }
-  // Use the ComputerAI component to generate the computer's move
-  const computerMove = getNextMove(newGameState.board);
 
-  if (!computerMove) {
-    newGameState.outcome = "human";
+  setTimeout(function () {
+    // Use the ComputerAI component to generate the computer's move
+    const computerMove = getNextMove(newGameState.board);
+
+    if (!computerMove) {
+      newGameState.outcome = "human";
+      setGameState(newGameState);
+      return;
+    }
+
+    // Update the board with the new positions of the checkers
+    newGameState.board[computerMove.start.row][computerMove.start.col] = null;
+
+    if (computerMove.end.row === 0) {
+      newGameState.board[computerMove.end.row][computerMove.end.col] =
+        "computerKing";
+    } else {
+      newGameState.board[computerMove.end.row][computerMove.end.col] =
+        computerMove.color;
+    }
+
+    // Check if the game is over
+    if (isGameOver(newGameState.board)) {
+      newGameState.outcome = "computer";
+    }
+
+    // Update the game state
     setGameState(newGameState);
-    return;
-  }
-
-  // Update the board with the new positions of the checkers
-  newGameState.board[computerMove.start.row][computerMove.start.col] = null;
-
-  if (computerMove.end.row === 0) {
-    newGameState.board[computerMove.end.row][computerMove.end.col] =
-      "computerKing";
-  } else {
-    newGameState.board[computerMove.end.row][computerMove.end.col] =
-      computerMove.color;
-  }
-
-  // Check if the game is over
-  if (isGameOver(newGameState.board)) {
-    newGameState.outcome = "computer";
-  }
-
-  // Update the game state
-  setGameState(newGameState);
+  }, 500);
 };
 
 const isValidMove = (start, end, board) => {
