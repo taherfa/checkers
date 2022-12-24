@@ -11,8 +11,6 @@ const Game = () => {
     outcome: null, // 'human', 'computer', or null if the game is still ongoing
   });
 
-  console.log(gameState.outcome)
-
   const handleMove = (start, end) => {
     // Make a copy of the current game state
     const newGameState = { ...gameState };
