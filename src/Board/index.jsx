@@ -33,7 +33,7 @@ const Board = ({ board, handleSquareClick }) => {
 const Square = ({ color, row, col, handleClick }) => {
   const backgroundColor = (row + col) % 2 === 0 ? "white" : "tan";
 
-  let actuallyColor = mapPieceToColor(color);
+  let checkerColor = mapPieceToColor(color);
 
   return (
     <div
@@ -41,7 +41,7 @@ const Square = ({ color, row, col, handleClick }) => {
       style={{ backgroundColor }}
       onClick={() => handleClick({ color, row, col })}
     >
-      {color ? <Checker color={actuallyColor} /> : null}
+      {color ? <Checker color={checkerColor} /> : null}
     </div>
   );
 };

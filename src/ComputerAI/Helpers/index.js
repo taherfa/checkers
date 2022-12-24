@@ -130,7 +130,6 @@ const canCapture = (board, row, col, newRow, newCol) => {
 };
 
 export const selectBestMove = (moves, board, pieceType) => {
-  console.log("all", moves);
   // finds a move that results in the opponent's piece being captured
   for (const move of moves) {
     if (Math.abs(move.startRow - move.row) === 2) {
@@ -148,8 +147,6 @@ export const selectBestMove = (moves, board, pieceType) => {
     // Check if the checker would be captured after making the move
     return !isCheckerCaptured(testBoard, move.row, move.col);
   });
-
-  console.log("safe", safeMoves);
 
   // If there are no safe moves, return the first move in the list
   if (safeMoves.length === 0) {

@@ -26,18 +26,18 @@ export const callHandleMove = (
   }
 };
 
-export const mapPieceToColor = (color) => {
-  let actuallyColor = null;
-  if (color) {
-    if (color === "human") {
-      actuallyColor = "red";
-    } else if (color === "computer") {
-      actuallyColor = "black";
-    } else if (color === "humanKing") {
-      actuallyColor = "red-king";
+export const mapPieceToColor = (piece) => {
+  let color = null;
+  if (piece) {
+    if (piece === "human") {
+      color = "red";
+    } else if (piece === "computer") {
+      color = "black";
+    } else if (piece === "humanKing") {
+      color = "red-king";
     } else {
-      actuallyColor = "black-king";
+      color = "black-king";
     }
   }
-  return actuallyColor;
+  return color;
 };

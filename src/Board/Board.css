@@ -1,6 +1,6 @@
 .board {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   border: 5px solid black;
 }
 

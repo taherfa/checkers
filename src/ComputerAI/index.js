@@ -2,7 +2,7 @@ import { getPossibleMoves, selectBestMove } from "./Helpers";
 
 export function getNextMove(board) {
   const moves = getPossibleMoves(board);
-  if (moves == null) {
+  if (moves.length === 0) {
     return null;
   }
 
