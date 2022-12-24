@@ -232,6 +232,7 @@ const isCheckerCaptured = (board, row, col) => {
 
 export function getNextMove(board) {
   const moves = getPossibleMoves(board);
+  console.log(moves)
   let pieceType = board[moves[0].startRow][moves[0].startCol];
   const bestMove = selectBestMove(moves, board, pieceType);
 
