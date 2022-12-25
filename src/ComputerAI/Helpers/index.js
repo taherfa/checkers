@@ -137,9 +137,11 @@ export const selectBestMove = (moves, board, pieceType) => {
     }
   }
 
-  for (const move of moves) {
-    if (move.row === 0) {
-      return move;
+  if (pieceType !== "computerKing") {
+    for (const move of moves) {
+      if (move.row === 0) {
+        return move;
+      }
     }
   }
 
